@@ -278,3 +278,102 @@ for thing in my_array:
     print(thing)
 ```
 ### Decorators
+```python
+def decorator(foo):
+    def info(*args, **kwargs):
+        print(f'Name: {foo.__name__}')
+        return foo(*args, **kwargs)
+    return info
+
+@decorator
+def sub(a, b):
+    return a - b
+
+if __name__ == "__main__":
+    print(sub(10, 6))
+```
+### Local and global variables
+```python
+animal = 'wombat'
+
+def change_local_1():
+    animal = 'wombat'
+    print(f'[INFO] inside change_local: {animal}, id: {id(animal)}')
+
+def change_local_2():
+    animal = 'fruitbat'
+    print(f'[INFO] inside change_local: {animal}, id: {id(animal)}')
+
+def change_global_1():
+    print(f'[INFO] First calling of the global variable ---> ERROR {animal}')
+    animal = 'fruitbat'
+    print(f'[INFO] inside change_local: {animal}, id: {id(animal)}')
+
+def change_global_2():
+    global animal
+    print(f'[INFO] First calling of the global variable ---> WITHOUT ERROR {animal}')
+    animal = 'fruitbat'
+    print(f'[INFO] inside change_local: {animal}, id: {id(animal)}')
+
+if __name__ == "__main__":
+    print(f'[INFO] outside change_local: {animal}, id: {id(animal)}')
+    change_local_1()
+    # --- output of the program (the same addresses)---
+    # [INFO] outside change_local: wombat, id: 140656527905712
+    # [INFO] inside change_local: wombat,  id: 140656527905712
+    print(f'[INFO] outside change_local: {animal}, id: {id(animal)}')
+    change_local_2()
+    # --- output of the program (NOT the same addresses)---
+    # [INFO] outside change_local: wombat,  id: 140578532774832
+    # [INFO] inside change_local: fruitbat, id: 140578530595440
+
+    # Wrong function ----->
+    # change_global_1()
+
+    # Correct function --->
+    change_global_2()
+```
+We can check local and global variable spaces by using:
+- locals()
+- globals()
+### Recursions
+```python
+def my_flatten(args):
+    for item in args:
+        if isinstance(item, list):
+            for subitem in my_flatten(item):
+                yield subitem
+        else:
+            yield item
+
+if __name__ == "__main__":
+    lol = [1, 2, [3, 4, 5], [6, [7, 8, 9], []]]
+    print(list(my_flatten(lol)))
+```
+### Exceptions (try, except)
+```python
+# One Exceptions ---------->
+if __name__ == "__main__":
+    short_list = [1, 2, 3]
+    positioin = 5
+    try:
+        print(f'[INFO] short_list[{positioin}] = {short_list[positioin]}')
+    except:
+        print(f'[ERROR] Need a position between 0 and {len(short_list)-1} but got {positioin}')
+
+# Several Exceptions ---------->
+if __name__ == "__main__":
+    short_list = [1, 2, 3]
+    value = input(f'Position [q to quit]?')
+    while True:
+        if value == 'q':
+            break
+        try:
+            position = int(value)
+            print(f'[INFO] Output: {short_list[position]}')
+        except IndexError as err:
+            print(f'[ERROR] Bad index: {position}')
+        except Exception as other:
+            print(f'[ERROR] Something else broke: {other}')
+        break
+```
