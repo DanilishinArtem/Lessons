@@ -105,4 +105,27 @@ if __name__ == "__main__":
         fout.write(poem)
     check_file('relativity.txt')
 ```
-<!-- 192 -->
+## Operation for files
+|Function|Arg|Return|
+|--------|---|------|
+|os.path.exists|path/to/dir|Bool|
+|os.path.isfile|file name|Bool|
+|os.path.isdir|path/to/dir|Bool|
+|os.path.isabs|path/to/dir|Bool|
+|os.rename|name1, name2|None|
+|os.link|name1, name2|None|
+|os.symlink|name1, name2|None|
+|os.path.islink|name|Bool|
+|os.chmod|name, 0o400 (user/group/other)|None|
+|os.chown|name, uid, gid|None|
+|os.remove|file name|None|
+
+## Operation for folders
+|Function|Arg|Return|
+|--------|---|------|
+|os.rmdir|path/to/dir|None|
+|os.mkdir|path/to/dir|None|
+|os.listdir|path/to/dir|list|
+|os.chdir|path/to/dir|None|
+|os.path.abspath|relative/path/to/dir|Absolute path|
+|os.path.join|name1, name2, ...|Path|
