@@ -131,4 +131,56 @@ if __name__ == "__main__":
     ├── Client.sendall
     └── Client.recv
 ```
+### ZeroMQ
+#### Server part
+```python
+import zmq
+
+if __name__ == "__main__":
+    host = '127.0.0.1'
+    port = 6789
+    context = zmq.Context()
+    server = context.socket(zmq.REP)
+    server.bind(f'tcp://{host}:{port}')
+    while True:
+        # Waiting next request of the client
+        request_bytes = server.recv()
+        request_str = request_bytes.decode('utf-8')
+        print(f'That voice in my head says: {request_str}')
+        reply_str = f'Stop saying: {request_str}'
+        reply_bytes = bytes(reply_str, 'utf-8')
+        server.send(reply_bytes)
+# Output:
+# That voice in my head says: message [1]
+# That voice in my head says: message [2]
+# That voice in my head says: message [3]
+# That voice in my head says: message [4]
+# That voice in my head says: message [5]
+```
+#### Client part
+```python
+import zmq
+
+host = '127.0.0.1'
+port = 6789
+
+if __name__ == "__main__":
+    context = zmq.Context()
+    client = context.socket(zmq.REQ)
+    client.connect(f'tcp://{host}:{port}')
+    for num in range(1,6):
+        request_str = f'message [{num}]'
+        request_bytes = request_str.encode('utf-8')
+        client.send(request_bytes)
+        reply_bytes = client.recv()
+        reply_str = reply_bytes.decode('utf-8')
+        print(f'Sent {request_str}, received {reply_str}')
+# Output:
+# Sent message [1], received Stop saying: message [1]
+# Sent message [2], received Stop saying: message [2]
+# Sent message [3], received Stop saying: message [3]
+# Sent message [4], received Stop saying: message [4]
+# Sent message [5], received Stop saying: message [5]
+```
+
 <!-- 375 -->
