@@ -44,3 +44,41 @@ if __name__ == "__main__":
         output = [row for row in cin]
     print(f'[INFO] Result of reading: {output}')
 ```
+### XML format
+```python
+import xml.etree.ElementTree as et
+
+if __name__ == "__main__":
+    tree = et.ElementTree(file='./additional_files/example.xml')
+    root = tree.getroot()
+    print(f'[ROOT] Tag: {root.tag}')
+    for child in root:
+        print(f'[CHILD] tag: {child.tag}, attributes: {child.attrib}')
+        for grandchild in child:
+            print(f'[GRANDCHILD] tag: {grandchild.tag}, attributes: {grandchild.attrib}')
+```
+### JSON format
+```python
+import json
+
+if __name__ == "__main__":
+    with open('./additional_files/example.json', 'rt') as jf:
+        example = json.load(jf)
+    print(example['breakfast'])
+    
+```
+### Configurations files
+```python
+import configparser
+
+if __name__ == "__main__":
+    cfg = configparser.ConfigParser()
+    cfg.read('./additional_files/example.cfg')
+    print(f'[INFO] cfg: {cfg}')
+    print(f'[INFO] cfg french: {cfg['french']}')
+    print(f'[INFO] cfg french: {cfg['french']['greeting']}')
+# output:
+# [INFO] cfg: <configparser.ConfigParser object at 0x7f831ac1b890>
+# [INFO] cfg french: <Section: french>
+# [INFO] cfg french: Bonjour
+```
