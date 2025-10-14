@@ -182,5 +182,82 @@ if __name__ == "__main__":
 # Sent message [4], received Stop saying: message [4]
 # Sent message [5], received Stop saying: message [5]
 ```
+### REDIS
+#### Publisher part
+```python
+import redis
+import random
 
+
+if __name__ == "__main__":
+    conn = redis.Redis()
+    cats = ['siamese', 'persian', 'maine coon', 'norwegian forest']
+    hats = ['stovepipe', 'bowler', 'tam-o-shanter', 'fedora']
+    for msg in range(10):
+        cat = random.choice(cats)
+        hat = random.choice(hats)
+        print(f'[Publisher] Publish: {cat} wears a {hat}')
+        conn.publish(cat, hat)
+```
+#### Subscriber part
+```python
+import redis
+
+
+if __name__ == "__main__":
+    conn = redis.Redis()
+    topics = ['maine coon', 'persian']
+    sub = conn.pubsub()
+    sub.subscribe(topics)
+    for msg in sub.listen():
+        if msg['type'] == 'message':
+            cat = msg['channel']
+            hat = msg['data']
+            print(f'[Subscriber] Subscribe: {cat} wears a {hat}')
+```
+## Remote procedure protocol (RPC)
+### XMLRPC
+#### Server part
+```python
+from xmlrpc.server import SimpleXMLRPCServer
+
+def double(num):
+    return num * 2
+
+if __name__ == "__main__":
+    server = SimpleXMLRPCServer(('localhost', 6789))
+    server.register_function(double, 'double')
+    server.serve_forever()
+```
+#### Client part
+```python
+import xmlrpc.client
+
+if __name__ == "__main__":
+    proxy = xmlrpc.client.ServerProxy('http://localhost:6789/')
+    num = 7
+    result = proxy.double(num)
+    print(f'{num} * 2 = {result}')
+```
+### JSONRPC
+#### Server part
+```python
+from jsonrpcserver import method, serve
+
+@method
+def double(num):
+    return num * 2
+
+if __name__ == "__main__":
+    serve()
+```
+#### Client
+```python
+from jsonrpcclient import request
+
+if __name__ == "__main__":
+    num = 7
+    response = request('http://localhost:5000', double, num)
+    print('num * 2 = {response}')
+```
 <!-- 375 -->
