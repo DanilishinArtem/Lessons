@@ -19,7 +19,7 @@ if __name__ == "__main__":
 import socket
 
 target_host = '127.0.0.1'
-target_port = 9997
+target_port = 9998
 
 if __name__ == "__main__":
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
