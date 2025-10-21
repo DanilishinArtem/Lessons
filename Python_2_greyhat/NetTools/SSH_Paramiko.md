@@ -29,16 +29,11 @@ if __name__ == "__main__":
 ```
 Output
 ```python
-# Username: artemdanilisin
-# Password: 
-# Enter server IP: 127.0.0.1
-# Enter port or <CR>: 22
-# Enter command or <CR>: whoami
-# ---Output---
-# artemdanilisin
+Username: artemdanilisin
+Password: 
+Enter server IP: 127.0.0.1
+Enter port or <CR>: 22
+Enter command or <CR>: whoami
+---Output---
+artemdanilisin
 ```
-
-
-
-
-<!-- 44 -->
