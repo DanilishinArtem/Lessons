@@ -1,33 +1,30 @@
-import paramiko
-import logging
+import socket
+import os
 
-logging.basicConfig(level=logging.DEBUG)
+HOST = '127.0.0.1'
 
-def ssh_command(ip, port, user, passwd, cmd):
-    client = paramiko.SSHClient()
-    logging.info('Client created')
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    logging.info('Seted policy')
-    client.connect(ip, port=port, username=user, password=passwd)
-    logging.info('Client connected')
+def main():
+    # creation of the raw socket and link it to the common interface
+    if os.name == 'nt':
+        socket_protocol = socket.IPPROTO_IP
+    else:
+        socket_protocol = socket.IPPROTO_ICMP
+    
+    sniffer = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket_protocol)
+    sniffer.bind((HOST, 0))
+    # making capturing ip header
+    sniffer.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
-    _, stdout, stderr = client.exec_command(cmd)
-    logging.info('Command executed')
-    output = stdout.readlines() + stderr.readlines()
-    logging.info(f'Output: {output}')
-    if output:
-        print('---Output---')
-        for line in output:
-            print(line.strip())
+    if os.name == 'nt':
+        sniffer.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
+
+    # reading one package
+    print(f'[INFO] Recieved package: {sniffer.recvfrom(65565)}')
+
+    # if OS is windows, gonna turn off nonselective regime
+    if os.name == 'nt':
+        sniffer.ioctl(socket.SIO_RCVALL, socket.RCVALL_OFF)
 
 
 if __name__ == "__main__":
-    import getpass
-    # user = getpass.getuser()
-    user = input('Username: ')
-    password = getpass.getpass()
-
-    ip = input('Enter server IP: ') or '192.168.1.203'
-    port = input('Enter port or <CR>: ') or 2222
-    cmd = input('Enter command or <CR>: ') or 'id'
-    ssh_command(ip, port, user, password, cmd)
+    main()
