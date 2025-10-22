@@ -59,10 +59,10 @@ if __name__ == "__main__":
     main()
 
 # Output for server:
-    # [*] Listening on 0.0.0.0:9998
-    # [*] Accepted connection from 127.0.0.1:49048
-    # [*] Received: GET / HTTP/1.1
-    # HOST: google.com
+    [*] Listening on 0.0.0.0:9998
+    [*] Accepted connection from 127.0.0.1:49048
+    [*] Received: GET / HTTP/1.1
+    HOST: google.com
 # Output for client:
-    # ACK
+    ACK
 ```
