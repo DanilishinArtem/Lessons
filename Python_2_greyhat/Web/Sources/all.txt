@@ -1,0 +1,8 @@
+CSV
+admin
+index
+search
+login
+images
+logout
+categories
